@@ -7,9 +7,6 @@ class YugabyteCli < Formula
   depends_on "python"
 
   def install
-    rm_f buildpath/"lib/cassandra-driver-internal-only-3.13.0.post0-743d942c.zip"
-    rm_f buildpath/"lib/futures-2.1.6-py2.py3-none-any.zip"
-    rm_f buildpath/"lib/six-1.7.3-py2.py3-none-any.zip"
     libexec.install Dir["*"]
     bin.install_symlink libexec/"postgres/bin/ysqlsh"
     bin.install_symlink libexec/"bin/cqlsh"
