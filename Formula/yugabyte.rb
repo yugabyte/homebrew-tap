@@ -1,17 +1,21 @@
 class Yugabyte < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://yugabyte.com"
-  url "https://downloads.yugabyte.com/yugabyte-2.0.5.2-darwin.tar.gz"
-  sha256 "8d9b939fe10ba4116c569e27b5b177e9249e448a369dc92b42f5f4a41fa5c8b6"
+  url "https://downloads.yugabyte.com/yugabyte-2.0.6.0-darwin.tar.gz"
+  sha256 "96c23560845647c3dbff4e1923f4a5caec5fb34ccb2e50fccee4c19d5671f3fc"
   depends_on :java => "1.8"
   def install
-    prefix.install Dir["*"]
-    bin.install_symlink prefix/"yugabyted"
-    bin.install_symlink prefix/"postgres/bin/ysqlsh"
+    libexec.install Dir["*"]
+    bin.install_symlink libexec/"yugabyted"
+  end
+  def caveats
+    "Use yugabyted status to check the status of the database.
+Use ysqlsh to drop into an SQL shell to interact with the database"
   end
   def post_install
     (var/"yugabyte_data").mkpath
-    (var/"log/yugabyte_logs").mkpath
+    (prefix/"logs").mkpath
+    (var/"log/yugabyte").mkpath
     if !(File.exist?((etc/"yugabyte.conf"))) then
       (etc/"yugabyte.conf").write yugabyte_conf
     end
@@ -32,6 +36,7 @@ class Yugabyte < Formula
     }
   EOS
   end
+  plist_options :startup => true
   plist_options :manual => "yugabyted start --config #{HOMEBREW_PREFIX}/etc/yugabyte.conf"
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
@@ -42,15 +47,20 @@ class Yugabyte < Formula
       <string>#{plist_name}</string>
       <key>ProgramArguments</key>
       <array>
-        <string>#{prefix}/yugabyted</string>
+        <string>#{bin}/yugabyted</string>
         <string>start</string>
         <string>--config</string>
         <string>#{etc}/yugabyte.conf</string>
+        <string>--daemon</string>
+        <string>false</string>
       </array>
       <key>RunAtLoad</key>
       <true/>
       <key>KeepAlive</key>
-      <false/>
+      <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+      </dict>
       <key>WorkingDirectory</key>
       <string>#{HOMEBREW_PREFIX}</string>
       <key>StandardErrorPath</key>
