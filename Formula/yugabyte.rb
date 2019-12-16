@@ -95,6 +95,6 @@ Use ysqlsh to drop into an SQL shell to interact with the database"
   end
 
   test do
-    system "#{prefix}/yugabyted", "help"
+    system "#{libexec}/bin/yugabyted", "version", "--config", "#{HOMEBREW_PREFIX}/etc/yugabyte.conf"
   end
 end

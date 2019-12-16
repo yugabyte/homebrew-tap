@@ -16,6 +16,6 @@ class YugabyteClient < Formula
   end
   
   test do
-    system "#{opt_prefix}/ysqlsh", "--help"
+    system "#{libexec}/bin/ysqlsh", "--help"
   end
 end
