@@ -1,11 +1,14 @@
 class YugabyteClient < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://yugabyte.com"
-  url "https://downloads.yugabyte.com/yugabyte-2.0.6.0-darwin.tar.gz"
-  sha256 "96c23560845647c3dbff4e1923f4a5caec5fb34ccb2e50fccee4c19d5671f3fc"
+  url "https://downloads.yugabyte.com/yugabyte-2.0.8.0-darwin.tar.gz"
+  sha256 "da9f64857e38a4df29652829f80f19ddf05aa0da1bb50c4833f1b837a71ed6c6" 
+  
   depends_on :java => "1.8"
   depends_on "python"
 
+  conflicts_with "yugabyte", :because => "yugabyte also ships with YSQLSH and CQLSH"
+  
   def install
     libexec.install Dir["*"]
     bin.install_symlink libexec/"postgres/bin/ysqlsh"
