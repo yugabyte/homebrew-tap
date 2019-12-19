@@ -1,18 +1,19 @@
 class Yugabyte < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://yugabyte.com"
-  url "https://downloads.yugabyte.com/yugabyte-2.0.6.0-darwin.tar.gz"
-  sha256 "96c23560845647c3dbff4e1923f4a5caec5fb34ccb2e50fccee4c19d5671f3fc"
+  url "https://downloads.yugabyte.com/yugabyte-2.0.8.0-darwin.tar.gz"
+  sha256 "da9f64857e38a4df29652829f80f19ddf05aa0da1bb50c4833f1b837a71ed6c6"
+
   depends_on :java => "1.8"
   depends_on "python"
+
   def install
     libexec.install Dir["*"]
-    bin.install_symlink libexec/"yugabyted"
+    bin.install_symlink libexec/"bin/yugabyted"
+    bin.install_symlink libexec/"postgres/bin/ysqlsh"
+    bin.install_symlink libexec/"bin/cqlsh"
   end
-  def caveats
-    "Use yugabyted status to check the status of the database.
-Use ysqlsh to drop into an SQL shell to interact with the database"
-  end
+
   def post_install
     (var/"yugabyte_data").mkpath
     (prefix/"logs").mkpath
@@ -21,6 +22,7 @@ Use ysqlsh to drop into an SQL shell to interact with the database"
       (etc/"yugabyte.conf").write yugabyte_conf
     end
   end
+
   def yugabyte_conf; <<~EOS
     {
     "tserver_webserver_port": 9000, 
@@ -37,8 +39,15 @@ Use ysqlsh to drop into an SQL shell to interact with the database"
     }
   EOS
   end
+
+  def caveats
+    "Use yugabyted status to check the status of the database.
+Use ysqlsh to drop into an SQL shell to interact with the database"
+  end
+
   plist_options :startup => true
   plist_options :manual => "yugabyted start --config #{HOMEBREW_PREFIX}/etc/yugabyte.conf"
+
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -55,13 +64,13 @@ Use ysqlsh to drop into an SQL shell to interact with the database"
         <string>--daemon</string>
         <string>false</string>
       </array>
-      <key>RunAtLoad</key>
-      <true/>
       <key>KeepAlive</key>
       <dict>
         <key>SuccessfulExit</key>
         <false/>
       </dict>
+      <key>RunAtLoad</key>
+      <true/>
       <key>WorkingDirectory</key>
       <string>#{HOMEBREW_PREFIX}</string>
       <key>StandardErrorPath</key>
@@ -84,6 +93,6 @@ Use ysqlsh to drop into an SQL shell to interact with the database"
   end
 
   test do
-    system "#{prefix}/yugabyted", "help"
+    system "#{libexec}/bin/yugabyted", "version", "--config", "#{HOMEBREW_PREFIX}/etc/yugabyte.conf"
   end
 end
