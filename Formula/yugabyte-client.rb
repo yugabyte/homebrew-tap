@@ -7,8 +7,6 @@ class YugabyteClient < Formula
   depends_on :java => "1.8"
   depends_on "python"
 
-  conflicts_with "yugabyte", :because => "yugabyte also ships with YSQLSH and CQLSH"
-  
   def install
     libexec.install Dir["*"]
     bin.install_symlink libexec/"postgres/bin/ysqlsh"
