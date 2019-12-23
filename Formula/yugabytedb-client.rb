@@ -1,4 +1,4 @@
-class YugabyteClient < Formula
+class YugabytedbClient < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://yugabyte.com"
   url "https://downloads.yugabyte.com/yugabyte-2.0.8.0-darwin.tar.gz"

@@ -1,4 +1,4 @@
-class Yugabyte < Formula
+class Yugabytedb < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://yugabyte.com"
   url "https://downloads.yugabyte.com/yugabyte-2.0.8.0-darwin.tar.gz"
@@ -40,9 +40,12 @@ class Yugabyte < Formula
   EOS
   end
 
-  def caveats
-    "Use yugabyted status to check the status of the database.
-Use ysqlsh to drop into an SQL shell to interact with the database"
+  def caveats; <<~EOS
+    Use yugabyted status to check the status of the database.
+    Use ysqlsh to drop into an SQL shell to interact with the database
+    If you are upgrading Yugabyte version to newer version, Please restart Yugabyte service.
+    `brew services restart yugabytedb`
+  EOS
   end
 
   plist_options :startup => true
@@ -74,9 +77,9 @@ Use ysqlsh to drop into an SQL shell to interact with the database"
       <key>WorkingDirectory</key>
       <string>#{HOMEBREW_PREFIX}</string>
       <key>StandardErrorPath</key>
-      <string>#{var}/log/yugabyte/yugabyted.log</string>
+      <string>#{var}/log/yugabyte/yugabyted-service.log</string>
       <key>StandardOutPath</key>
-      <string>#{var}/log/yugabyte/yugabyted.log</string>
+      <string>#{var}/log/yugabyte/yugabyted-service.log</string>
       <key>HardResourceLimits</key>
       <dict>
         <key>NumberOfFiles</key>
