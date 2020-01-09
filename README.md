@@ -9,7 +9,7 @@ This is a custom [Homebrew](https://brew.sh) tap for official Yugabyte DB.
 You can add the custom tap in a macOS terminal session using:
 
 ```
-$ brew tap yugabyte/yugabyte
+$ brew tap yugabyte/yugabytedb
 ```
 
 ## Installing Formulae
@@ -24,19 +24,17 @@ For example:
 
  * Install the latest available production release of YugabyteDB. This will currently install YUgabyte 2.0.5.2:
  ```
- $ brew install yugabyte
+ $ brew install yugabytedb
  ```
 
  * Install Yugabyte CLI tools :
  ```
- $ brew install yugabyte-cli
+ $ brew install yugabytedb-client
  ```
-
-
 
 ## Default Paths for the Yugabyte Formula
 
-In addition to installing the Yugabyte server and tool binaries, the `yugabyte` formula creates:
+In addition to installing the Yugabyte server and tool binaries, the `yugabytedb` formula creates:
 
  * log directory path: `/usr/local/var/log/yugabyte`
  * configuration file: `/usr/local/etc/yugabyte.conf`
@@ -44,20 +42,20 @@ In addition to installing the Yugabyte server and tool binaries, the `yugabyte` 
 
 ## Starting the Yugabyte Server
 
-### Run `yugabyte` as a service
+### Run `yugabytedb` as a service
 
-To have start `yugabyte` immediately and also restart at login, use:
+To have start `yugabytedb` immediately and also restart at login, use:
 
 ```
-$ brew services start yugabyte
+$ brew services start yugabytedb
 ```
 If you manage `yugabyted` as a service it will use the default paths listed above. To stop the server instance use:
 
 ```
-$ brew services stop yugabyte
+$ brew services stop yugabytedb
 ```
 
-### Start `yugabyte` manually
+### Start `yugabytedb` manually
 
 If you want yo run Yugayte manually then, you can run:
 
