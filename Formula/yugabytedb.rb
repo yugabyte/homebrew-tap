@@ -96,6 +96,6 @@ class Yugabytedb < Formula
   end
 
   test do
-    system "#{libexec}/bin/yugabyted", "version", "--config", "#{HOMEBREW_PREFIX}/etc/yugabyte.conf"
+    system "#{libexec}/bin/yugabyted", "version", "--config", "#{HOMEBREW_PREFIX}/etc/yugabyted.conf"
   end
 end
