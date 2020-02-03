@@ -18,8 +18,8 @@ class Yugabytedb < Formula
     (var/"yugabyte_data").mkpath
     (prefix/"logs").mkpath
     (var/"log/yugabyte").mkpath
-    if !(File.exist?((etc/"yugabyte.conf"))) then
-      (etc/"yugabyte.conf").write yugabyte_conf
+    if !(File.exist?((etc/"yugabyted.conf"))) then
+      (etc/"yugabyted.conf").write yugabyte_conf
     end
   end
 
@@ -49,7 +49,7 @@ class Yugabytedb < Formula
   end
 
   plist_options :startup => true
-  plist_options :manual => "yugabyted start --config #{HOMEBREW_PREFIX}/etc/yugabyte.conf"
+  plist_options :manual => "yugabyted start --config #{HOMEBREW_PREFIX}/etc/yugabyted.conf"
 
   def plist; <<~EOS
     <?xml version="1.0" encoding="UTF-8"?>
@@ -63,7 +63,7 @@ class Yugabytedb < Formula
         <string>#{bin}/yugabyted</string>
         <string>start</string>
         <string>--config</string>
-        <string>#{etc}/yugabyte.conf</string>
+        <string>#{etc}/yugabyted.conf</string>
         <string>--daemon</string>
         <string>false</string>
       </array>
