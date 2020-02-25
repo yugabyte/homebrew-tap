@@ -1,8 +1,8 @@
 class YugabytedbClient < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://yugabyte.com"
-  url "https://downloads.yugabyte.com/yugabyte-2.0.11.0-darwin.tar.gz"
-  sha256 "39acba6800f9d4c665ed44323502cbb650d25430716cd0ecef7135b482d2ce7d" 
+  url "https://downloads.yugabyte.com/yugabyte-2.1.0.0-darwin.tar.gz"
+  sha256 "cb451a47cc8a3804ed0152f4471b4c3626593da7b401d7bfbd843805beaa10f9" 
   
   depends_on :java => "1.8"
   depends_on "python"
