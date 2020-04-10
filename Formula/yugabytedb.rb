@@ -45,6 +45,8 @@ class Yugabytedb < Formula
     Use ysqlsh to drop into an SQL shell to interact with the database
     If you are upgrading Yugabyte version to newer version, Please restart Yugabyte service.
     `brew services restart yugabytedb`
+
+    Installing and running multiple versions of yugabytedb is not supported.
   EOS
   end
 
