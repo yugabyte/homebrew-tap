@@ -43,7 +43,7 @@ update_formula() {
   version="$2"
   # TODO: download URL as variable
   info "update_formula: updating the formula '${formula}' to '${version}'."
-  brew bump-formula-pr --dry-run --write \
+  brew bump-formula-pr --dry-run --write --force \
     --url "https://downloads.yugabyte.com/yugabyte-${version}-darwin.tar.gz" \
     "${formula}"
   modified_files="${modified_files} ${formula}"
