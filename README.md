@@ -1,3 +1,5 @@
+[![Update formula version](https://github.com/yugabyte/homebrew-yugabytedb/workflows/Update%20formula%20version/badge.svg)](https://github.com/yugabyte/homebrew-yugabytedb/actions?query=workflow%3A%22Update+formula+version%22)
+
 <img src="https://github.com/yugabyte/yugabyte-db/raw/master/architecture/images/ybDB_horizontal.jpg" width="256"/> <img src="https://brew.sh/assets/img/homebrew-256x256.png" height="72">
 
 # The Yugabyte DB Homebrew Tap
