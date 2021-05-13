@@ -4,7 +4,7 @@ class Yugabytedb < Formula
   url "https://downloads.yugabyte.com/yugabyte-2.1.8.2-darwin.tar.gz"
   sha256 "dd6cbd63ad4dd150c9707ed5dc8f3696adf9828dff941bae2255bc04eff7e924"
 
-  depends_on "openjdk"
+  depends_on "openjdk@8"
   depends_on "python"
 
   def install
