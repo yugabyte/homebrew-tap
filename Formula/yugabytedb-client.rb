@@ -4,7 +4,7 @@ class YugabytedbClient < Formula
   url "https://downloads.yugabyte.com/yugabyte-client-2.1.1.0-darwin.tar.gz"
   sha256 "102a85f1ad9e02df46edeae0d2ef126aefd2b594e8a335284facf94d812dc8c3"
 
-  depends_on :java => "1.8"
+  depends_on "openjdk@8"
   depends_on "python"
 
   def install
