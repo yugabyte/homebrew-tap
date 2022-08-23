@@ -1,4 +1,4 @@
-class YbVoyager < Formula
+9class YbVoyager < Formula
   desc "YugabyteDB's migration tool"
   homepage "https://github.com/yugabyte/yb-voyager/"
   url "https://github.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/v1.0.0-xbeta.0.tar.gz"
@@ -17,6 +17,6 @@ class YbVoyager < Formula
   end
 
   test do
-    system "#{bin}/yb-voyager", "--help"
+    system "#{bin}/yb-voyager", "version"
   end
 end
