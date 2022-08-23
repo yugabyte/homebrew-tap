@@ -69,6 +69,6 @@ $ brew services stop yugabytedb
 If you want yo run Yugayte manually then, you can run:
 
 ```
-$ yugabyted start --config /usr/local/etc/yugabyte.conf
+
 ```
 Note: if you do not include the `--config` option with a path to a configuration file, the Yugabyte server will start with the default config.
