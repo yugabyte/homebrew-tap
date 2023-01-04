@@ -9,17 +9,18 @@ class YugabytedbAT217 < Formula
 	keg_only :versioned_formula
 
 	depends_on "python@3.9"
-	depends_on "ssed"
 
 	def install
 		ENV.deparallelize
 
 		libexec.install Dir["*"]
-		system "ssed", "-i", "s:#!/usr/bin/env python:#!/usr/bin/env python3:", "#{libexec}/bin/yugabyted"
+    inreplace "#{libexec}/bin/yugabyted", "#!/usr/bin/env python", "#!/usr/bin/env python3"
 
-		bin.install_symlink libexec/"bin/yugabyted"
-		bin.install_symlink libexec/"postgres/bin/ysqlsh"
-		bin.install_symlink libexec/"bin/ycqlsh"
+    bin.install_symlink libexec/"bin/yugabyted"
+    ysqlsh_symlink = "#{HOMEBREW_PREFIX}/bin/ysqlsh"
+    ycqlsh_symlink = "#{HOMEBREW_PREFIX}/bin/ycqlsh"
+    bin.install_symlink libexec/"postgres/bin/ysqlsh" unless File.exist?(ysqlsh_symlink)
+    bin.install_symlink libexec/"bin/ycqlsh" unless File.exist?(ycqlsh_symlink)
 	end
 
 	test do
