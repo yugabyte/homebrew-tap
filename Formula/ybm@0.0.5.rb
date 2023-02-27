@@ -1,4 +1,4 @@
-class YbmCliAT005 < Formula
+class YbmAT005 < Formula
   desc "YugabyteDB Managed CLI"
   homepage "https://github.com/yugabyte/ybm-cli"
   version "0.0.5"
