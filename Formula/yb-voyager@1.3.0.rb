@@ -7,7 +7,7 @@ class YbVoyagerAT130 < Formula
   
     depends_on "go" => :build
     depends_on "libpq"
-    depends_on "yugabyte/tap/debezium"
+    depends_on "yugabyte/tap/debezium@2.2.0-1.3.0"
   
     def install
       ENV.deparallelize
