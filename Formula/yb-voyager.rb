@@ -1,1 +1,1 @@
-yb-voyager@1.5.0-rc2.rb
+yb-voyager@1.5.0.rb
