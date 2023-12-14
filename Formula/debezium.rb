@@ -1,1 +1,1 @@
-debezium@2.2.0-1.6.0.rb
+debezium@2.2.0-1.6.1.rb
