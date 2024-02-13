@@ -9,7 +9,7 @@ class YbVoyagerAT165Rc1 < Formula
     depends_on "go" => :build
     depends_on "libpq"
     depends_on "sqlite"
-    depends_on "yugabyte/tap/debezium@2.2.0-1.6.5-rc1"
+    depends_on "yugabyte/tap/debezium@2.3.3-1.6.5-rc1"
   
     def install
       ENV.deparallelize
