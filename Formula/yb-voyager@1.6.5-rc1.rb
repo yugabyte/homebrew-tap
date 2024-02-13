@@ -1,4 +1,4 @@
-class YbVoyagerAT161 < Formula
+class YbVoyagerAT165Rc1 < Formula
     desc "YugabyteDB's migration tool"
     homepage "https://github.com/yugabyte/yb-voyager/"
     url "https://github.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/v1.6.5-rc1.tar.gz"
