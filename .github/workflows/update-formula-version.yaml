@@ -16,16 +16,16 @@ jobs:
     - name: "Extract version number from tag"
       id: extract-version
       run: |
-        tag_name="${{ github.event.client_payload.tag }}"
-        echo "Extracting version number from the tag '${tag_name}'."
-        version_number="${tag_name/v/}"
+        release_name="${{ github.event.client_payload.release }}"
+        echo "Extracting version number from the release_tag '${release_name}'."
+        version_number="${release_name/v/}"
         # Keep dots and count the string length
         dot_count="$(res="${version_number//[^.]/}"; echo "${#res}")"
         if [[ "${dot_count}" -eq 2 ]]; then
           version_number="${version_number}.0"
         fi
         if [[ "$(res="${version_number//[^.]/}"; echo "${#res}")" -ne 3 ]]; then
-          echo "The tag '${tag_name}' is invalid. Expected format: 'v1.2.3' or 'v1.2.3.5'." 1>&2
+          echo "The tag '${release_name}' is invalid. Expected format: 'v1.2.3' or 'v1.2.3.5'." 1>&2
           exit 1
         fi
         echo "Extracted the version number '${version_number}'."
