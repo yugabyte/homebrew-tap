@@ -70,8 +70,8 @@ is_major_eq() {
 }
 
 # is_minor_gt compares minor(x.y) of the given two versions. It
-# returns 0 exit code if the minor form of version1
-# is greater than version2
+# returns 0 exit code if the major form of both are equal and
+# minor form of version1 is greater than version2
 # argument 1: version1: a version string of the form x.y.z.w
 # argument 2: version2: a version string of the form x.y.z.w
 is_minor_gt() {
@@ -178,13 +178,11 @@ formula_name="yugabytedb"
 formula_class="Yugabytedb"
 formula_directory="$(pwd)/Formula"
 default_formula_file="${formula_directory}/${formula_name}.rb"
-# current_default_version="$(grep -E "^[[:space:]]+url" "${default_formula_file}" | cut -d "-" -f 2)"
 current_default_version="$(grep -E "^[[:space:]]+version" "$default_formula_file" | awk '{print $2}' | tr -d '"')"
 versioned_formula_files="$(find -E "${formula_directory}" -regex ".*/${formula_name}@[0-9]+\.[0-9]+\.rb")"
 modified_files=""
 
 for formula in ${versioned_formula_files}; do
-  # version_from_file="$(grep -E "^[[:space:]]+url" "${formula}" | cut -d "-" -f 2)"
   version_from_file="$(grep -E "^[[:space:]]+version" "$formula" | awk '{print $2}' | tr -d '"')"
   list_of_versions="${list_of_versions} ${version_from_file}"
 done
@@ -192,15 +190,22 @@ done
 info "current default version: '${current_default_version}'."
 info "list of versions from versioned formulas: '${list_of_versions}'."
 
+# Case 1: When major of latest version is greater than the version in current default formula
+# Make the latest version as the default, and create a versioned formula for current default version
 if is_major_gt $latest_version $current_default_version; then
     add_new_default_version "${latest_version}" "${current_default_version}"
     exit 0
 else
+    # Case 2: When major of latest version and the version in current default formula are equal
+    # but minor of latest version is greater than the version in current default formula
+    # Update the default formula with the new version.
     if is_minor_gt $latest_version $current_default_version; then
 		update_formula_file "${default_formula_file}" "${latest_version}"
         exit 0
     fi
 
+    # Case 3: When major of latest version and the version in current default formula are equal
+    # but minor of latest version is not greater than the version in current default formula (checked in above if block)
     if is_major_eq $latest_version $current_default_version; then
         info "Major of '${latest_version}' and '${current_default_version}' is same but minor of '${latest_version}' is lower or equal than '${current_default_version}'"
         exit 0
@@ -213,6 +218,9 @@ for formula in ${list_of_versions}; do
     if is_major_eq $latest_version $formula; then
         version_not_in_List_of_version=false
 
+        # Case 4: When major of latest version and the version in a versioned formula are equal
+        # but minor of latest version is greater than the version in the versioned formula
+        # Update the versioned formula with the new version.
         if is_minor_gt $latest_version $formula; then
 			split_formula_version=$(get_major_minor_version $formula)
     		read -r version_major version_minor <<< "$split_formula_version"
@@ -226,6 +234,8 @@ for formula in ${list_of_versions}; do
     fi
 done
 
+# Case 4: When major of latest version is not in the list of versioned formulas
+# Add a new versioned formula
 if $version_not_in_List_of_version; then
     info "'${latest_version}' not in default formula ('${current_default_version}') and list of versioned formulas ('${list_of_versions}')"
 	add_new_versioned_formula "${latest_version}"
