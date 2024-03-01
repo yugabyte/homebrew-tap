@@ -3,7 +3,7 @@ class YugabytedbAT218 < Formula
 	homepage "https://www.yugabyte.com/"
 	url "https://downloads.yugabyte.com/releases/2.18.5.2/yugabyte-2.18.5.2-b1-darwin-x86_64.tar.gz"
 	version "2.18.5.2"
-    sha256 "fe8a8b07d27aa91637f38b976e91cc35d7a575d134707b3d18cc4ce12cbed6e5"
+	sha256 "fe8a8b07d27aa91637f38b976e91cc35d7a575d134707b3d18cc4ce12cbed6e5"
 	license "Apache-2.0"
 
 	keg_only :versioned_formula
