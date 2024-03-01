@@ -6,7 +6,7 @@ class YugabytedbAT219 < Formula
 	sha256 "eac1257569176892d113034d5096d9b0bd75de14c94a3617c5b60f2f30b1e2c9"
 	license "Apache-2.0"
 
-    keg_only :versioned_formula
+	keg_only :versioned_formula
 
 	depends_on "python@3.9"
 
