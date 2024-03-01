@@ -13,76 +13,158 @@ info() {
   echo -e "\033[34m[INFO]\033[0m $*"
 }
 
-# version_eq compares major.minor of the given two versions. It
-# returns 0 exit code if the major.minor form of the given two
+# get_major_minor_version breaks a version in format x.y.z.w into
+# major (x.y) and minor (z.w)
+# argument 1: a version string of the form x.y.z.w
+get_major_minor_version() {
+    version="$1"
+
+    version_major="${version%.*.*}"
+    version_minor="${version#*.*.}"
+
+    echo "$version_major $version_minor"
+}
+
+# is_major_gt compares major(x.y) of the given two versions. It
+# returns 0 exit code if the major form of version1
+# is greater than version2
+# argument 1: version1: a version string of the form x.y.z.w
+# argument 2: version2: a version string of the form x.y.z.w
+is_major_gt() {
+    version1="$1"
+    version2="$2"
+
+    split_version1=$(get_major_minor_version $version1)
+    read -r version1_major version1_minor <<< "$split_version1"
+
+    split_version2=$(get_major_minor_version $version2)
+    read -r version2_major version2_minor <<< "$split_version2"
+
+    if [ "$version1_major" \> "$version2_major" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# is_major_eq compares major(x.y) of the given two versions. It
+# returns 0 exit code if the major form of the given two
 # versions is equal
 # argument 1: version1: a version string of the form x.y.z.w
 # argument 2: version2: a version string of the form x.y.z.w
-version_eq() {
-  test "${1%.*.*}" == "${2%.*.*}"
+is_major_eq() {
+    version1="$1"
+    version2="$2"
+
+    split_version1=$(get_major_minor_version $version1)
+    read -r version1_major version1_minor <<< "$split_version1"
+
+    split_version2=$(get_major_minor_version $version2)
+    read -r version2_major version2_minor <<< "$split_version2"
+
+    if [ "$version1_major" == "$version2_major" ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
-# version_gt compares major.minor of the given two versions. It
-# returns 0 exit code if the major.minor form of version1 is greater
-# than that of version2
-# https://web.archive.org/web/20191003081436/http://ask.xmodulo.com/compare-two-version-numbers.html
+# is_minor_gt compares minor(x.y) of the given two versions. It
+# returns 0 exit code if the major form of both are equal and
+# minor form of version1 is greater than version2
 # argument 1: version1: a version string of the form x.y.z.w
 # argument 2: version2: a version string of the form x.y.z.w
-version_gt() {
-  version1="${1%.*.*}"
-  version2="${2%.*.*}"
-  test "$(echo -e "${version1}\n${version2}" | sort -V | head -n 1)" != "${version1}"
+is_minor_gt() {
+    version1="$1"
+    version2="$2"
+
+    split_version1=$(get_major_minor_version $version1)
+    read -r version1_major version1_minor <<< "$split_version1"
+
+    split_version2=$(get_major_minor_version $version2)
+    read -r version2_major version2_minor <<< "$split_version2"
+
+    if [ "$version1_major" == "$version2_major" ] && [ "$version1_minor" \> "$version2_minor" ]; then
+        return 0
+    else
+        return 1
+    fi
 }
 
-# update_formula updates the given formula file with the new version's
-# download url and checksum
-# argument 1: formula_path: a complete path to ruby file of the formula
-# argument 2: version: a version string of the form x.y.z.w
-update_formula() {
-  formula="$1"
-  version="$2"
-  # TODO: download URL as variable
-  info "update_formula: updating the formula '${formula}' to '${version}'."
-  brew bump-formula-pr --dry-run --write --force \
-    --url "https://downloads.yugabyte.com/yugabyte-${version}-darwin.tar.gz" \
-    "${formula}"
-  modified_files="${modified_files} ${formula}"
+# update_formula_file updates the given formula file with the new version's
+# download url, version and checksum
+# argument 1: formula_file: a complete path to ruby file of the formula
+# argument 2: new_version: a version string of the form x.y.z.w
+update_formula_file() {
+    formula_file="$1"
+    new_version="$2"
+
+    info "update_formula_file: Trying to update '${formula_file}' with new version '${new_version}"
+    package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(endswith("-darwin-x86_64.tar.gz"))') || {
+		info "Cannot get package name for $new_version. Does manifest for it exists?"
+		exit 1
+	}
+
+    download_link="https://downloads.yugabyte.com/releases/${new_version}/${package_name}"
+    checksum=$(curl -sSL "$download_link" | { shasum -a 256 || sha256sum; } | awk '{print $1}')
+
+    info "update_formula_file: Download URL: '${download_link}'. sha256: '${checksum}'"
+    sed -i '' -e "s|url \".*\"|url \"$download_link\"|" \
+             -e "s|sha256 \".*\"|sha256 \"$checksum\"|" \
+             -e "s|version \".*\"|version \"$new_version\"|" "$formula_file"
+
+    modified_files="${modified_files} ${formula_file}"
 }
 
-# add_new_formula creates a versioned formula for old_version, updates
-# the default formula with new_version and updates Aliases accordingly
+# add_new_versioned_formula creates a versioned formula for the given version
 # argument 1: new_version: a version string of the form x.y.z.w
-# argument 2: old_version: a version string of the form x.y.z.w
-add_new_formula() {
-  new_version="$1"
-  old_version="$2"
-  short_old_version="${old_version%.*.*}"
-  old_version_formula="${formula_directory}/${formula_name}@${short_old_version}.rb"
+add_new_versioned_formula() {
+    new_version="$1"
 
-  # Create a versioned formula for old_version
-  info "add_new_formula: creating a versioned formula '${old_version_formula}' for '${old_version}'."
-  cp "${default_formula_file}" "${old_version_formula}"
-  # Update the class for old_version_formula
-  sed -i "" \
-      "s/^class ${formula_class} < Formula$/class ${formula_class}AT${short_old_version//./} < Formula/g" \
-      "${old_version_formula}"
+    split_new_version=$(get_major_minor_version $new_version)
+    read -r new_version_major new_version_minor <<< "$split_new_version"
 
-  # Append keg_only: versioned_formula to old_version_formula
-  sed -i "" '/^  sha256 "[0-9a-f]\{64\}"$/a\
-  \
-  \ \ keg_only :versioned_formula\
-  ' "${old_version_formula}"
+    new_version_formula_file="${formula_directory}/${formula_name}@${new_version_major}.rb"
 
-  modified_files="${modified_files} ${old_version_formula}"
+    # Create a versioned formula for old_version
+    info "add_new_versioned_formula: creating a versioned formula '${new_version_formula_file}' for '${new_version}'."
+    cp "${default_formula_file}" "${new_version_formula_file}"
 
-  # Update the default formula with new_version
-  update_formula "${default_formula_file}" "${new_version}"
-  # Rename the Aliases to new_version
-  info "add_new_formula: renaming the Aliases to '${new_version}'."
-  mv "./Aliases/${formula_name}@${short_old_version}" \
-     "./Aliases/${formula_name}@${new_version%.*.*}"
+    # Update the class for old_version_formula
+    info "Update the class for '${new_version_formula_file}' with '${new_version_major}'"
+    sed -i "" \
+        "s/^class ${formula_class} < Formula$/class ${formula_class}AT${new_version_major//./} < Formula/g" \
+        "${new_version_formula_file}"
 
-  modified_files="${modified_files} ./Aliases/${formula_name}@${short_old_version} ./Aliases/${formula_name}@${new_version%.*.*}"
+    # Append keg_only: versioned_formula to old_version_formula
+    info "Append 'keg_only: versioned_formula' to '${new_version_formula_file}'"
+    sed -i '' '/license/{s/.*/&\
+\
+    keg_only :versioned_formula/;}' $new_version_formula_file
+
+    update_formula_file "${new_version_formula_file}" "${new_version}"
+}
+
+# add_new_default_version creates a versioned formula for old_default_version,
+# updates the default formula with new_version and updates Aliases accordingly
+# argument 1: new_default_version: a version string of the form x.y.z.w
+# argument 2: old_default_version: a version string of the form x.y.z.w
+add_new_default_version() {
+    new_default_version="$1"
+    old_default_version="$2"
+
+    info "add_new_default_version: Creating a new versioned formula for '${old_default_version}' and updating default brew version to '${new_default_version}'."
+
+    add_new_versioned_formula "${old_default_version}"
+
+    update_formula_file "${default_formula_file}" "${new_default_version}"
+
+    # Rename the Aliases to new_version
+    info "add_new_default_version: renaming the Aliases to '${new_default_version}'."
+    mv "./Aliases/${formula_name}@${old_default_version%.*.*}" \
+        "./Aliases/${formula_name}@${new_default_version%.*.*}"
+
+    modified_files="${modified_files} ./Aliases/${formula_name}@${old_default_version%.*.*} ./Aliases/${formula_name}@${new_version%.*.*}"
 }
 
 
@@ -96,38 +178,69 @@ formula_name="yugabytedb"
 formula_class="Yugabytedb"
 formula_directory="$(pwd)/Formula"
 default_formula_file="${formula_directory}/${formula_name}.rb"
-current_default_version="$(grep -E "^[[:space:]]+url" "${default_formula_file}" | cut -d "-" -f 2)"
+current_default_version="$(grep -E "^[[:space:]]+version" "$default_formula_file" | awk '{print $2}' | tr -d '"')"
 versioned_formula_files="$(find -E "${formula_directory}" -regex ".*/${formula_name}@[0-9]+\.[0-9]+\.rb")"
 modified_files=""
 
 for formula in ${versioned_formula_files}; do
-  version_from_file="$(grep -E "^[[:space:]]+url" "${formula}" | cut -d "-" -f 2)"
+  version_from_file="$(grep -E "^[[:space:]]+version" "$formula" | awk '{print $2}' | tr -d '"')"
   list_of_versions="${list_of_versions} ${version_from_file}"
 done
 
 info "current default version: '${current_default_version}'."
 info "list of versions from versioned formulas: '${list_of_versions}'."
 
-# Patch update to default formula i.e. change in z or w from x.y.z.w
-if version_eq "${latest_version}" "${current_default_version}"; then
-  update_formula "${default_formula_file}" "${latest_version}"
-  exit 0
-fi
-
-# New release i.e. change in x or y from x.y.z.w
-if version_gt "${latest_version}" "${current_default_version}"; then
-  add_new_formula "${latest_version}" "${current_default_version}"
-  exit 0
-fi
-
-# Change in z or w for old versioned formula files
-for version in ${list_of_versions}; do
-  if version_eq "${latest_version}" "${version}"; then
-    update_formula "${formula_directory}/${formula_name}@${version%.*.*}.rb" \
-                   "${latest_version}"
+# Case 1: When major of latest version is greater than the version in current default formula
+# Make the latest version as the default, and create a versioned formula for current default version
+if is_major_gt $latest_version $current_default_version; then
+    add_new_default_version "${latest_version}" "${current_default_version}"
     exit 0
-  fi
+else
+    # Case 2: When major of latest version and the version in current default formula are equal
+    # but minor of latest version is greater than the version in current default formula
+    # Update the default formula with the new version.
+    if is_minor_gt $latest_version $current_default_version; then
+		update_formula_file "${default_formula_file}" "${latest_version}"
+        exit 0
+    fi
+
+    # Case 3: When major of latest version and the version in current default formula are equal
+    # but minor of latest version is not greater than the version in current default formula (checked in above if block)
+    if is_major_eq $latest_version $current_default_version; then
+        info "Major of '${latest_version}' and '${current_default_version}' is same but minor of '${latest_version}' is lower or equal than '${current_default_version}'"
+        exit 0
+    fi
+fi
+
+version_not_in_List_of_version=true
+
+for formula in ${list_of_versions}; do
+    if is_major_eq $latest_version $formula; then
+        version_not_in_List_of_version=false
+
+        # Case 4: When major of latest version and the version in a versioned formula are equal
+        # but minor of latest version is greater than the version in the versioned formula
+        # Update the versioned formula with the new version.
+        if is_minor_gt $latest_version $formula; then
+			split_formula_version=$(get_major_minor_version $formula)
+    		read -r version_major version_minor <<< "$split_formula_version"
+
+			formula_file_to_be_updated="${formula_directory}/${formula_name}@${version_major}.rb"
+			update_formula_file "${formula_file_to_be_updated}" "${latest_version}"
+            exit 0
+        fi
+
+        info "Major of '${latest_version}' and '${formula}' is same but minor of '${latest_version}' is smaller than '${formula}'"
+    fi
 done
+
+# Case 4: When major of latest version is not in the list of versioned formulas
+# Add a new versioned formula
+if $version_not_in_List_of_version; then
+    info "'${latest_version}' not in default formula ('${current_default_version}') and list of versioned formulas ('${list_of_versions}')"
+	add_new_versioned_formula "${latest_version}"
+    exit 0
+fi
 
 info "the released version, '${latest_version}' is older than \
 versions present in all the formula files in the repository."
