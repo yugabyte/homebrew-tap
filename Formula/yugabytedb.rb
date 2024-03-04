@@ -1,9 +1,9 @@
 class Yugabytedb < Formula
 	desc "High-performance distributed SQL database Yugabyte DB"
 	homepage "https://www.yugabyte.com/"
-	url "https://downloads.yugabyte.com/releases/2.20.1.3/yugabyte-2.20.1.3-b3-darwin-x86_64.tar.gz"
-	version "2.20.1.3"
-	sha256 "834ba81730cd572cfd9a995c0280d20f789c73a66c7837c27d2d7da9be9cfbdb"
+	url "https://downloads.yugabyte.com/releases/2.20.2.0/yugabyte-2.20.2.0-b145-darwin-x86_64.tar.gz"
+	version "2.20.2.0"
+	sha256 "f8d9c8bb8ae6e5b90de0f8b40930d7d831c062ba9dc34b56bb0234064bd765a7"
 	license "Apache-2.0"
 
 	depends_on "python@3.9"
