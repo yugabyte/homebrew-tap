@@ -29,25 +29,29 @@ jobs:
           exit 1
         fi
         echo "Extracted the version number '${version_number}'."
-        echo "::set-output name=yb_version::${version_number}"
+        echo "yb_version=${version_number}" >> "$GITHUB_ENV"
     - name: "Update the version of yugabytedb formula"
       id: update-yb-formula
       run: |
-        .ci/update_formula_version.sh '${{steps.extract-version.outputs.yb_version}}'
+        .ci/update_formula_version.sh "${yb_version}"
     - name: "Run brew audit on changed formula files"
       id: run-audit
       run: |
+        # https://github.com/orgs/Homebrew/discussions/4864
+        brew tap-new homebrew-releaser/test --no-git
+        cp -r Formulas/* $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula
         for file in ${{steps.update-yb-formula.outputs.modified_files}}; do
           if [[ "${file}" =~ .*\/Formula\/yugabytedb(@[0-9]+\.[0-9]+)?\.rb ]]; then
-            brew audit --strict --online "${file}"
+            brew audit --strict --online --formula "$(basename ${file%.rb})"
           fi
         done
+        brew untap homebrew-releaser/test
     - name: "Push the changes"
       run: |
         git status
         git diff
         git add ${{steps.update-yb-formula.outputs.modified_files}}
-        git commit -m "Update the version to ${{steps.extract-version.outputs.yb_version}}"
+        git commit -m "Update the version to ${yb_version}"
         git push origin ${{ github.ref }}
     - name: "Push the changes to a branch"
       if: failure() && steps.run-audit.outcome == 'failure'
@@ -55,8 +59,8 @@ jobs:
         git status
         git diff
         git add ${{steps.update-yb-formula.outputs.modified_files}}
-        git commit -m "Update the version to ${{steps.extract-version.outputs.yb_version}}"
-        branch_name="update-${{steps.extract-version.outputs.yb_version}}-${{github.run_id}}"
+        git commit -m "Update the version to ${yb_version}"
+        branch_name="update-${yb_version}-${{github.run_id}}"
         git push origin ${{ github.ref }}:${branch_name}
         echo "The 'run-audit' step for modified files has failed, please check the logs of 'audit-run' step for more details" 1>&2
         echo "The modified files are pushed to https://github.com/${{github.repository}}/tree/${branch_name}" 1>&2
