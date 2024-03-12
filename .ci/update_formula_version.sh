@@ -3,7 +3,7 @@
 set -o errexit -o pipefail
 
 export_modified_files() {
-  echo "::set-output name=modified_files::${modified_files}"
+  echo "modified_files=${modified_files}" >> $GITHUB_OUTPUT
 }
 
 trap export_modified_files EXIT
@@ -140,7 +140,7 @@ add_new_versioned_formula() {
     info "Append 'keg_only: versioned_formula' to '${new_version_formula_file}'"
     sed -i '' '/license/{s/.*/&\
 \
-    keg_only :versioned_formula/;}' $new_version_formula_file
+  keg_only :versioned_formula/;}' $new_version_formula_file
 
     update_formula_file "${new_version_formula_file}" "${new_version}"
 }
