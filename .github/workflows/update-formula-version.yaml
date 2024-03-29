@@ -39,9 +39,9 @@ jobs:
       run: |
         # https://github.com/orgs/Homebrew/discussions/4864
         brew tap-new homebrew-releaser/test --no-git
-        cp -r Formulas/* $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula
         for file in ${{steps.update-yb-formula.outputs.modified_files}}; do
           if [[ "${file}" =~ .*\/Formula\/yugabytedb(@[0-9]+\.[0-9]+)?\.rb ]]; then
+            cp -r ${file} $(brew --repository)/Library/Taps/homebrew-releaser/homebrew-test/Formula/.
             brew audit --strict --online --formula "$(basename ${file%.rb})"
           fi
         done
