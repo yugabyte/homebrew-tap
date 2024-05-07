@@ -21,6 +21,7 @@ class YbVoyagerAT170Rc1 < Formula
         (prefix/"etc/").mkdir
         (prefix/"etc/yb-voyager/").mkdir
         cp_r "pg_dump-args.ini", prefix/"etc/yb-voyager/pg_dump-args.ini"
+        cp_r "gather-assessment-metadata", prefix/"etc/yb-voyager/"
       end
     end
   
