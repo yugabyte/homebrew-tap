@@ -47,6 +47,7 @@ jobs:
         done
         brew untap homebrew-releaser/test
     - name: "Push the changes"
+      id: push-changes
       run: |
         git status
         git diff
@@ -54,7 +55,7 @@ jobs:
         git commit -m "Update the version to ${yb_version}"
         git push origin ${{ github.ref }}
     - name: "Push the changes to a branch"
-      if: failure() && steps.run-audit.outcome == 'failure'
+      if: failure() && (steps.run-audit.outcome == 'failure' || steps.push-changes.outcome == 'failure')
       run: |
         git status
         git diff
