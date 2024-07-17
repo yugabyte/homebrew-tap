@@ -46,23 +46,12 @@ jobs:
           fi
         done
         brew untap homebrew-releaser/test
-    - name: "Push the changes"
-      id: push-changes
-      run: |
-        git status
-        git diff
-        git add ${{steps.update-yb-formula.outputs.modified_files}}
-        git commit -m "Update the version to ${yb_version}"
-        git push origin ${{ github.ref }}
     - name: "Push the changes to a branch"
-      if: failure() && (steps.run-audit.outcome == 'failure' || steps.push-changes.outcome == 'failure')
       run: |
         git status
         git diff
         git add ${{steps.update-yb-formula.outputs.modified_files}}
-        git commit -m "Update the version to ${yb_version}"
-        branch_name="update-${yb_version}-${{github.run_id}}"
-        git push origin ${{ github.ref }}:${branch_name}
-        echo "The 'run-audit' step for modified files has failed, please check the logs of 'audit-run' step for more details" 1>&2
-        echo "The modified files are pushed to https://github.com/${{github.repository}}/tree/${branch_name}" 1>&2
-        exit 1
+        git commit -m "Update the version to ${{ yb_version }}"
+        branch_name="update-${{ yb_version }}-${{github.run_id}}"
+        git push origin ${{ github.ref }}:${{ branch_name }}
+        echo "The modified files are pushed to https://github.com/${{github.repository}}/tree/${{ branch_name }}" 1>&2
