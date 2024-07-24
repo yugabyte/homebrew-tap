@@ -1,21 +1,21 @@
 class Ybm < Formula
   desc "YugabyteDB Managed CLI"
   homepage "https://github.com/yugabyte/ybm-cli"
-  version "0.1.19"
+  version "0.1.20"
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.19/ybm_0.1.19_darwin_amd64.zip"
-      sha256 "1d21f5d71830137020ba7bd7f3236dd2211f22752727a8e32735f77a944c9260"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.20/ybm_0.1.20_darwin_amd64.zip"
+      sha256 "2e436677852dbba6943e38ac8483fda2bb1247c4c4ae0208c0815c325d7a5634"
 
       def install
         bin.install "ybm"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.19/ybm_0.1.19_darwin_arm64.zip"
-      sha256 "2a25b471e50c149210344958c93e27ba5656dcc2048b75150152bd04437edf50"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.20/ybm_0.1.20_darwin_arm64.zip"
+      sha256 "f4ef71bdd805027708d65e0016ebf727d15c023c40bc7a68ca57b58153b05c03"
 
       def install
         bin.install "ybm"
@@ -25,20 +25,20 @@ class Ybm < Formula
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.19/ybm_0.1.19_linux_amd64.zip"
-      sha256 "a226e2de7ec283588a8b419e45464e742c5e0f5f4cb066635835b0222e92d6c8"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.20/ybm_0.1.20_linux_amd64.zip"
+      sha256 "19bb72a468840f2b29ebef403dccb5f2f2851e00a01bc853fd73cc8e40724dee"
 
       def install
         bin.install "ybm"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.19/ybm_0.1.19_linux_arm64.zip"
-      sha256 "53170c257c932eba1096d35c1638f2bfc5049367144aa418da9dd70236568598"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.20/ybm_0.1.20_linux_arm64.zip"
+      sha256 "132be6dc2d6a4950e88367a0d49c88d95935f17f5fa4addc14b7580908090465"
 
       def install
         bin.install "ybm"
       end
     end
   end
-end
+end  
