@@ -99,7 +99,7 @@ update_formula_file() {
     formula_file="$1"
     new_version="$2"
 
-    info "update_formula_file: Trying to update '${formula_file}' with new version '${new_version}"
+    info "update_formula_file: Trying to update '${formula_file}' with new version '${new_version}'"
     package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(endswith("-darwin-x86_64.tar.gz"))') || {
 		info "Cannot get package name for $new_version. Does manifest for it exists?"
 		exit 1
