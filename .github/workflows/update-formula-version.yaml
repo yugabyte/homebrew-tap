@@ -33,7 +33,7 @@ jobs:
     - name: "Update the version of yugabytedb formula"
       id: update-yb-formula
       run: |
-        .ci/update_formula_version.sh "${yb_version}"
+        .ci/update_formula_version.sh "$yb_version"
     - name: "Run brew audit on changed formula files"
       id: run-audit
       run: |
@@ -51,7 +51,7 @@ jobs:
         git status
         git diff
         git add ${{steps.update-yb-formula.outputs.modified_files}}
-        git commit -m "Update the version to ${{ yb_version }}"
-        branch_name="update-${{ yb_version }}-${{github.run_id}}"
-        git push origin ${{ github.ref }}:${{ branch_name }}
-        echo "The modified files are pushed to https://github.com/${{github.repository}}/tree/${{ branch_name }}" 1>&2
+        git commit -m "Update the version to $yb_version"
+        branch_name="update-$yb_version-${{github.run_id}}"
+        git push origin ${{ github.ref }}:$branch_name
+        echo "The modified files are pushed to https://github.com/${{github.repository}}/tree/$branch_name" 1>&2
