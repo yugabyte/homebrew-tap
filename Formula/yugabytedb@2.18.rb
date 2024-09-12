@@ -1,9 +1,9 @@
 class YugabytedbAT218 < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://www.yugabyte.com/"
-  url "https://downloads.yugabyte.com/releases/2.18.5.2/yugabyte-2.18.5.2-b1-darwin-x86_64.tar.gz"
-  version "2.18.5.2"
-  sha256 "fe8a8b07d27aa91637f38b976e91cc35d7a575d134707b3d18cc4ce12cbed6e5"
+  url "https://downloads.yugabyte.com/releases/2.18.9.0/yugabyte-2.18.9.0-b17-darwin-x86_64.tar.gz"
+  version "2.18.9.0"
+  sha256 "1b8fcda02d7c16cc2c73b045fa603fde8b2a073fe9c3d3b71a1303c3f834941d"
   license "Apache-2.0"
 
   keg_only :versioned_formula
