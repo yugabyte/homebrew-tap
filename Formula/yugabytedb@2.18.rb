@@ -19,8 +19,17 @@ class YugabytedbAT218 < Formula
     bin.install_symlink libexec/"bin/yugabyted"
     ysqlsh_symlink = "#{HOMEBREW_PREFIX}/bin/ysqlsh"
     ycqlsh_symlink = "#{HOMEBREW_PREFIX}/bin/ycqlsh"
+
+    ysql_dump_symlink = "#{HOMEBREW_PREFIX}/bin/ysql_dump"
+    ysql_dumpall_symlink = "#{HOMEBREW_PREFIX}/bin/ysql_dumpall"
+    ysql_bench_symlink = "#{HOMEBREW_PREFIX}/bin/ysql_bench"
+
     bin.install_symlink libexec/"postgres/bin/ysqlsh" unless File.exist?(ysqlsh_symlink)
     bin.install_symlink libexec/"bin/ycqlsh" unless File.exist?(ycqlsh_symlink)
+
+    bin.install_symlink libexec/"postgres/bin/ysql_dump" unless File.exist?(ysql_dump_symlink)
+    bin.install_symlink libexec/"postgres/bin/ysql_dumpall" unless File.exist?(ysql_dumpall_symlink)
+    bin.install_symlink libexec/"postgres/bin/ysql_bench" unless File.exist?(ysql_bench_symlink)
   end
 
   test do
