@@ -50,6 +50,10 @@ jobs:
       run: |
         git status
         git diff
+        if [ -z "${{ steps.update-yb-formula.outputs.modified_files }}" ]; then
+          echo "No modified files. Nothing to commit."
+          exit 0
+        fi
         git add ${{steps.update-yb-formula.outputs.modified_files}}
         git commit -m "Update the version to $yb_version"
         branch_name="update-$yb_version-${{github.run_id}}"
