@@ -22,7 +22,8 @@ class YbVoyagerAT183Rc1 < Formula
             cp_r "pg_dump-args.ini", prefix/"etc/yb-voyager/pg_dump-args.ini"
             cp_r "gather-assessment-metadata", prefix/"etc/yb-voyager/"
         end
-        Dir.chdir("yb-voyager/guardrails-scripts") do
+        Dir.chdir("guardrails-scripts") do
+            (prefix/"opt/").mkdir
             (prefix/"opt/yb-voyager").mkdir
             (prefix/"opt/yb-voyager/guardrails-scripts").mkdir
             cp_r ".", prefix/"opt/yb-voyager/guardrails-scripts"
