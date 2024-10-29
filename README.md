@@ -1,4 +1,5 @@
-![Update formula version](https://github.com/yugabyte/homebrew-yugabytedb/actions/workflows/update-formula-version.yaml/badge.svg)
+
+<a href="https://github.com/yugabyte/homebrew-tap/actions"><img alt="GitHub release" src="https://github.com/yugabyte/homebrew-yugabytedb/actions/workflows/update-formula-version.yaml/badge.svg"></a>
 
 <img src="https://www.yugabyte.com/wp-content/themes/yugabyte/assets/images/yugabyteDB-site-logo-new-blue.svg" width="256"/> <img src="https://brew.sh/assets/img/homebrew-256x256.png" height="72">
 
