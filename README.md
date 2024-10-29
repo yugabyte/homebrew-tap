@@ -1,4 +1,4 @@
-[![Update formula version](https://github.com/yugabyte/homebrew-yugabytedb/workflows/Update%20formula%20version/badge.svg)](https://github.com/yugabyte/homebrew-yugabytedb/actions?query=workflow%3A%22Update+formula+version%22)
+![Update formula version](https://github.com/yugabyte/homebrew-yugabytedb/actions/workflows/update-formula-version.yaml/badge.svg)
 
 <img src="https://www.yugabyte.com/wp-content/themes/yugabyte/assets/images/yugabyteDB-site-logo-new-blue.svg" width="256"/> <img src="https://brew.sh/assets/img/homebrew-256x256.png" height="72">
 
