@@ -6,7 +6,7 @@ class YbVoyagerAT188 < Formula
     version "1.8.8"
     license "Apache-2.0"
     depends_on "go" => :build
-    depends_on "postgresql@17"
+    depends_on "postgresql@16"
     depends_on "sqlite"
     depends_on "yugabyte/tap/debezium@2.5.2-1.8.8"
     
