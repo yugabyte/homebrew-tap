@@ -1,11 +1,7 @@
 class Ybm < Formula
   desc "YugabyteDB Managed CLI"
   homepage "https://github.com/yugabyte/ybm-cli"
-<<<<<<< HEAD
-  version "0.1.22"
-=======
   version "0.1.23"
->>>>>>> a4e1b83 (release CLI v0.1.23)
   license "Apache-2.0"
 
   on_macos do
