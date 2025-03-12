@@ -1,21 +1,25 @@
 class Ybm < Formula
   desc "YugabyteDB Managed CLI"
   homepage "https://github.com/yugabyte/ybm-cli"
+<<<<<<< HEAD
   version "0.1.22"
+=======
+  version "0.1.23"
+>>>>>>> a4e1b83 (release CLI v0.1.23)
   license "Apache-2.0"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.22/ybm_0.1.22_darwin_amd64.zip"
-      sha256 "e50796130ad49998e30d0987428196f6d920a59f13cc346d89f6e1098b046da4"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.23/ybm_0.1.23_darwin_amd64.zip"
+      sha256 "92631d3c478c7b22a93bd6d3b5af9201c0cb3f9dbfe12168d6a3838a635506d4"
 
       def install
         bin.install "ybm"
       end
     end
     if Hardware::CPU.arm?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.22/ybm_0.1.22_darwin_arm64.zip"
-      sha256 "9f7903bc4231e32e68e3b907baca76b40e408344425c879cb047d633f6980d4a"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.23/ybm_0.1.23_darwin_arm64.zip"
+      sha256 "ec7b132c9f8ae9765adf2a4a80b34404387c00ee0cb20d00573257dba3db47a3"
 
       def install
         bin.install "ybm"
@@ -25,16 +29,16 @@ class Ybm < Formula
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.22/ybm_0.1.22_linux_amd64.zip"
-      sha256 "62429156d514339da888ee820384499a4c34dd63eed1c3170c2f9836d68ad61b"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.23/ybm_0.1.23_linux_amd64.zip"
+      sha256 "d88617d969af27bda7025c5eabda9927ffbacf6a181d268470de854c5971d039"
 
       def install
         bin.install "ybm"
       end
     end
     if Hardware::CPU.arm? && Hardware::CPU.is_64_bit?
-      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.22/ybm_0.1.22_linux_arm64.zip"
-      sha256 "35669f0f1115ef89f08624c50d72860559d572189567cb9fb9eaad7d294dc243"
+      url "https://github.com/yugabyte/ybm-cli/releases/download/v0.1.23/ybm_0.1.23_linux_arm64.zip"
+      sha256 "17b81cd7e02fb4f04f4a7412ef0eea259bc29eba4224c3d86d1a71e89513c5d5"
 
       def install
         bin.install "ybm"
