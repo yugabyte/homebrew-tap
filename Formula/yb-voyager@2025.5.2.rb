@@ -1,9 +1,9 @@
-class YbVoyagerAT0rc1202552 < Formula
+class YbVoyagerAT202552 < Formula
     desc "YugabyteDB's migration tool"
     homepage "https://github.com/yugabyte/yb-voyager/"
-    url "https://github.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/v0rc1.2025.5.2.tar.gz"
-    sha256 "73974fdce9d85e4c75f13799069b7b0c526b98ae4b5d6bbf11d46b3bc11f0d7f"
-    version "0rc1.2025.5.2"
+    url "https://github.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/v2025.5.2.tar.gz"
+    sha256 "7e2c7e8737130a4b9b45eae913ad6618579808d3fd1ada6bbba9cb118647be80"
+    version "2025.5.2"
     license "Apache-2.0"
     depends_on "go" => :build
     depends_on "postgresql@17"
