@@ -5,8 +5,6 @@ class DebeziumAT252202572 < Formula
     version "2.5.2-2025.7.2"
     sha256 "04c19556b4825b0d8a14cf1a1fd8c94b1332b24182270fc6f8abdfcc0be76ad4"
     license "Apache-2.0"
-    depends_on "maven" => :build
-    depends_on "java11" => :build
 
     def install
         ENV.deparallelize
