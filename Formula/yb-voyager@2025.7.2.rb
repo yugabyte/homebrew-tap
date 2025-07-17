@@ -2,7 +2,7 @@ class YbVoyagerAT202572 < Formula
     desc "YugabyteDB's migration tool"
     homepage "https://github.com/yugabyte/yb-voyager/"
     url "https://github.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/v2025.7.2.tar.gz"
-    sha256 "54bab7b8dbb0bb2bb0a89708760ace9f324824093b5c178ed490c1a56845bfce"
+    sha256 "d2159f4b471f2af80299b6abca706724eea59fa1e947dfbe43ca339f31cd01a5"
     version "2025.7.2"
     license "Apache-2.0"
     depends_on "go" => :build
