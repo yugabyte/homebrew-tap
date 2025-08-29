@@ -25,6 +25,22 @@ get_major_minor_version() {
     echo "$version_major $version_minor"
 }
 
+# version_gt compares two version strings using version sort
+# returns 0 if version1 > version2, 1 otherwise
+# argument 1: version1: a version string
+# argument 2: version2: a version string
+version_gt() {
+    local version1="$1"
+    local version2="$2"
+    
+    # Use sort -V to compare versions properly
+    if [ "$(printf '%s\n%s' "$version1" "$version2" | sort -V | tail -n1)" = "$version1" ] && [ "$version1" != "$version2" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 # is_major_gt compares major(x.y) of the given two versions. It
 # returns 0 exit code if the major form of version1
 # is greater than version2
@@ -40,7 +56,7 @@ is_major_gt() {
     split_version2=$(get_major_minor_version $version2)
     read -r version2_major version2_minor <<< "$split_version2"
 
-    if [ "$version1_major" \> "$version2_major" ]; then
+    if version_gt "$version1_major" "$version2_major"; then
         return 0
     else
         return 1
@@ -84,7 +100,7 @@ is_minor_gt() {
     split_version2=$(get_major_minor_version $version2)
     read -r version2_major version2_minor <<< "$split_version2"
 
-    if [ "$version1_major" == "$version2_major" ] && [ "$version1_minor" \> "$version2_minor" ]; then
+    if [ "$version1_major" == "$version2_major" ] && version_gt "$version1_minor" "$version2_minor"; then
         return 0
     else
         return 1
@@ -100,7 +116,7 @@ update_formula_file() {
     new_version="$2"
 
     info "update_formula_file: Trying to update '${formula_file}' with new version '${new_version}'"
-    package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(endswith("-darwin-x86_64.tar.gz"))') || {
+    package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(startswith("yugabyte-") and endswith("-darwin-x86_64.tar.gz"))') || {
 		info "Cannot get package name for $new_version. Does manifest for it exists?"
 		exit 1
 	}
