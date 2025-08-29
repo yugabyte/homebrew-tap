@@ -1,10 +1,12 @@
-class Yugabytedb < Formula
+class YugabytedbAT225 < Formula
   desc "High-performance distributed SQL database Yugabyte DB"
   homepage "https://www.yugabyte.com/"
-  url "https://downloads.yugabyte.com/releases/2025.1.0.1/yugabyte-2025.1.0.1-b3-darwin-x86_64.tar.gz"
-  version "2025.1.0.1"
-  sha256 "d9e6d0951d45f876f99fa196bed82493a65a6d83eae09ad928919b326ffa8634"
+  url "https://downloads.yugabyte.com/releases/2.25.2.0/yugabyte-2.25.2.0-b359-darwin-x86_64.tar.gz"
+  version "2.25.2.0"
+  sha256 "3a98d0e88786fcd78fb18939c6e8f664aa7d45bb314a6ce009d3d95557f826c2"
   license "Apache-2.0"
+
+  keg_only :versioned_formula
 
   depends_on "python@3.9"
 
