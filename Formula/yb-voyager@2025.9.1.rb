@@ -1,7 +1,7 @@
 class YbVoyagerAT202591 < Formula
     desc "YugabyteDB's migration tool"
     homepage "https://github.com/yugabyte/yb-voyager/"
-    url "https://software.yugabyte.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/v2025.9.1.tar.gz"
+    url "https://software.yugabyte.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/brew/v2025.9.1.tar.gz"
     sha256 "70697cfaa44d8abbbe030e13707e5385057f7ea8cbee1f7a47176c18a58eaa62"
     version "2025.9.1"
     license "Apache-2.0"
