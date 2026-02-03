@@ -1,9 +1,9 @@
-class DebeziumAT0rc1252202621 < Formula
+class DebeziumAT252202621 < Formula
     desc "Debezium is an open source distributed platform for change data capture"
     homepage "https://github.com/yugabyte/yb-voyager/"
-    url "https://github.com/yugabyte/yb-voyager/releases/download/yb-voyager%2Fv0rc1.2026.2.1/debezium-server.tar.gz"
-    version "0rc1.2.5.2-2026.2.1"
-    sha256 "377864eb235bf9e23338f94cedf99d94834153ab9c7b8491e1088e105fe1e290"
+    url "https://github.com/yugabyte/yb-voyager/releases/download/yb-voyager%2Fv2026.2.1/debezium-server.tar.gz"
+    version "2.5.2-2026.2.1"
+    sha256 "1955a27835fe69147d462344ea190b6006bda535b275579a431143a48b77ffdd"
     license "Apache-2.0"
 
     def install
