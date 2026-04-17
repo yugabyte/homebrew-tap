@@ -116,18 +116,31 @@ update_formula_file() {
     new_version="$2"
 
     info "update_formula_file: Trying to update '${formula_file}' with new version '${new_version}'"
-    package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(startswith("yugabyte-") and endswith("-darwin-x86_64.tar.gz"))') || {
-		info "Cannot get package name for $new_version. Does manifest for it exists?"
+    x86_64_package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(startswith("yugabyte-") and endswith("-darwin-x86_64.tar.gz"))') || {
+		info "Cannot get package name for $new_version for x86_64 platform. Does manifest for it exists?"
 		exit 1
 	}
 
-    download_link="https://downloads.yugabyte.com/releases/${new_version}/${package_name}"
-    checksum=$(curl -sSL "$download_link" | { shasum -a 256 || sha256sum; } | awk '{print $1}')
+    arm64_package_name=$(curl -s "https://downloads.yugabyte.com/releases/${new_version}/manifest.json" | jq -r '.packages[] | select(startswith("yugabyte-") and endswith("-darwin-arm64.tar.gz"))') || {
+		info "Cannot get package name for $new_version for arm64 platform. Does manifest for it exists?"
+		exit 1
+	}
 
-    info "update_formula_file: Download URL: '${download_link}'. sha256: '${checksum}'"
-    sed -i '' -e "s|url \".*\"|url \"$download_link\"|" \
-             -e "s|sha256 \".*\"|sha256 \"$checksum\"|" \
-             -e "s|version \".*\"|version \"$new_version\"|" "$formula_file"
+    x86_64_download_link="https://downloads.yugabyte.com/releases/${new_version}/${x86_64_package_name}"
+    arm64_download_link="https://downloads.yugabyte.com/releases/${new_version}/${arm64_package_name}"
+
+    x86_64_checksum=$(curl -sSL "$x86_64_download_link" | { shasum -a 256 || sha256sum; } | awk '{print $1}')
+    arm64_checksum=$(curl -sSL "$arm64_download_link" | { shasum -a 256 || sha256sum; } | awk '{print $1}')
+
+    info "update_formula_file: x86_64 Download URL: '${x86_64_download_link}'. sha256: '${x86_64_checksum}'"
+    info "update_formula_file: arm64 Download URL: '${arm64_download_link}'. sha256: '${arm64_checksum}'"
+    sed -i '' \
+        -e "/on_arm do/,/end/ s|url \".*\"|url \"${arm64_download_link}\"|" \
+        -e "/on_arm do/,/end/ s|sha256 \".*\"|sha256 \"${arm64_checksum}\"|" \
+        -e "/on_intel do/,/end/ s|url \".*\"|url \"${x86_64_download_link}\"|" \
+        -e "/on_intel do/,/end/ s|sha256 \".*\"|sha256 \"${x86_64_checksum}\"|" \
+        -e "s|version \".*\"|version \"${new_version}\"|" \
+        "$formula_file"
 
     modified_files="${modified_files} ${formula_file}"
 }
