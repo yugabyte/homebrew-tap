@@ -1,14 +1,14 @@
-class YbVoyagerAT0rc1202671 < Formula
+class YbVoyagerAT202671 < Formula
     desc "YugabyteDB's migration tool"
     homepage "https://github.com/yugabyte/yb-voyager/"
-    url "https://software.yugabyte.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/brew/v0rc1.2026.7.1.tar.gz"
-    sha256 "6f32eccf0bdfeb5ef3773aa9210780bb98d4f72efd3208f46e0e5c391ce94bee"
-    version "0rc1.2026.7.1"
+    url "https://software.yugabyte.com/yugabyte/yb-voyager/archive/refs/tags/yb-voyager/brew/v2026.7.1.tar.gz"
+    sha256 "963787eab7af2cdcf3de7e817f6c52e3f94e48507979e3749f4f6e64ec9626c4"
+    version "2026.7.1"
     license "Apache-2.0"
     depends_on "go@1.24" => :build
     depends_on "postgresql@17"
     depends_on "sqlite"
-    depends_on "yugabyte/tap/debezium@0rc1.2.5.2-2026.7.1"
+    depends_on "yugabyte/tap/debezium@2.5.2-2026.7.1"
     
     def install
         ENV.deparallelize
