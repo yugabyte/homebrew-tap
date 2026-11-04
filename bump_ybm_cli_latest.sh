@@ -76,7 +76,8 @@ EOF
 ver_destination_file=$SCRIPT_DIR/Formula/ybm@${version}.rb
 echo "Writing to $ver_destination_file"
 
-cp $destination_file $ver_destination_file
+# Homebrew expects the class name to match the file name: ybm@0.1.35 -> YbmAT0135
+sed "1s/^class Ybm </class YbmAT${version//./} </" "$destination_file" >"$ver_destination_file"
 
 # Remove the SHA256 file if it exists
 if [ -f $shaFile ]; then
